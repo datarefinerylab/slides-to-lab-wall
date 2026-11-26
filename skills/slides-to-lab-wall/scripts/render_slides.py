@@ -46,8 +46,8 @@ def run(cmd, timeout=240):
     except (subprocess.TimeoutExpired, FileNotFoundError) as e:
         return subprocess.CompletedProcess(cmd, 1, '', str(e))
 
-def osa(script):
-    return run(['osascript', '-e', script], timeout=300)
+def osa(script, timeout=300):
+    return run(['osascript', '-e', script], timeout=timeout)
 
 def to_pdf(src, tmp):
     ext = os.path.splitext(src)[1].lower()
@@ -68,9 +68,10 @@ def to_pdf(src, tmp):
   set p to active presentation
   save p in POSIX file "{q(pdf)}" as save as PDF
   close p saving no
-end tell''')
+end tell''', timeout=120)       # PowerPoint may sit on a "Grant File Access" dialog: do not wait 5 minutes
             if os.path.exists(pdf):
                 return pdf, 'PowerPoint'
+            print('PowerPoint did not export (it may be waiting on a "Grant File Access" dialog); trying Keynote.', file=sys.stderr)
         if os.path.exists('/Applications/Keynote.app'):
             osa(f'''tell application "Keynote"
   set d to open POSIX file "{q(src)}"

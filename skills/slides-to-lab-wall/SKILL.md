@@ -85,10 +85,18 @@ Follow `references/interactive.md`. In short:
 python3 scripts/snap.py ./slide-decks my-talk --ref WORK/original --out WORK/snaps
 ```
 
-This takes a picture of every slide (all builds shown, demo answers on question slides) and every wall view, and makes `WORK/snaps/index.html` showing original | web | wall for each slide.
+This takes a picture of every slide (all builds shown, demo answers on question slides) and every wall view, in about a minute for 50 slides. It gives each slide a difference score against the original and writes:
 
-- **Look at every pair** and fix every difference you can see: position, size, line breaks, font, colour, missing elements, cropping. Repeat until they match.
+- `worst.jpg`: the 8 most different slides, original next to web. **Look at this first**; it is one picture instead of fifty.
+- `walls-1.jpg`, `walls-2.jpg` …: the wall views stacked, 13 to a picture.
+- `index.html`: original | web | wall for every slide, most different first; `deck-NN.jpg` and `wall-NN.jpg` for single slides.
+
+Then:
+
+- **Fix every difference you can see**: position, size, line breaks, font, colour, missing elements, cropping. Look at every pair at least once, not only the worst ones.
+- **Check again only what you changed**: `--slides 4,12-14` (and `--only deck` or `--only wall`) takes about 15 seconds. Run the whole deck once more at the end.
 - Then check the wall pictures. Text must be large and readable, nothing may be cut off, and each wall view must clearly belong to its slide.
+- A high score is not always a fault in the deck: the original pictures can be wrong too (see "Pitfalls" in `references/style-matching.md`).
 - If you have a browser tool, also open the deck locally (`python3 -m http.server` in the clone). Click through it once to see the transitions and builds, and check the console for errors.
 
 ## 8. Publish

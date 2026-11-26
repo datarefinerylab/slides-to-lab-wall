@@ -88,6 +88,19 @@ The deck-wide default (`transition` in `LABDECK`) should be the most common tran
 - Emphasis and exit effects do not map. Show the end state, or split the slide in two if the exit matters to the story.
 - Add the same `data-step` numbers to the matching parts of the slide's wall template, so the wall builds with the slide.
 
+## Pitfalls
+
+Seen on real decks. Check these before spending time on a difference:
+
+- **Inter changes `=>` into ⇒** (and `->` into an arrow) through its `calt` feature. When Inter stands in for Aptos or Helvetica Neue, add `font-feature-settings:"calt" 0` to `.slide` and `.ld-wl`.
+- **Wingdings and Symbol characters** (arrows, ticks, bullets) are stored as private-use characters (U+F020–U+F0FF) and show as empty boxes on the web. Map them to real Unicode, for example U+F0E0 → →, U+F0FC → ✓, U+F0A7 → ▪, U+F0B7 → •.
+- **Slide numbers count hidden slides** in PowerPoint. When the original pictures came from Keynote (the fallback in `render_slides.py`), Keynote renumbers without the hidden slides. Keep PowerPoint's numbers.
+- **Pictures from the Keynote fallback are not exact.** It drops SVG pictures (the space stays empty) and draws tables a little taller. Trust the outline's positions over such a picture, and say so if a slide's score stays high only because of this.
+- **Space before the first paragraph** of a text box is ignored by PowerPoint. Do not add it as `margin-top`.
+- **`baseline="0"`** on a text run is ordinary text. Only a positive value is superscript and only a negative one is subscript.
+- **Videos** play in the snapshots, so their frame can differ from the original's poster picture. That is not a fault.
+- **Slow steps you write yourself** (cropping pictures, drawing backgrounds): cache the results and use threads (Pillow releases the GIL), so a rebuild after a small fix takes seconds, not a minute.
+
 ## When the user asks for changes
 
 Apply them on top of the matched deck:

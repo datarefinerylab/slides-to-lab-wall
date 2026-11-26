@@ -65,7 +65,7 @@ Sizes that read well: kicker 22–26 px uppercase, title 72–100 px, body 32–
 
 ## Checking
 
-`snap.py` makes `wall-NN.png` (3840×360) for every slide with all builds shown. Look at each one. Nothing may be cut off, no text may be smaller than about 28 px, and no single word may sit right on a screen gap. You can also open `my-talk/?wall&s=N` locally and use ← / → to step through.
+`snap.py` makes `wall-NN.jpg` (3840×360) for every slide with all builds shown, and stacks them 13 to a picture in `walls-1.jpg` …, so you can look through them quickly. Look at each one. Nothing may be cut off, no text may be smaller than about 28 px, and no single word may sit right on a screen gap. You can also open `my-talk/?wall&s=N` locally and use ← / → to step through.
 
 ## How sync works (for troubleshooting)
 
