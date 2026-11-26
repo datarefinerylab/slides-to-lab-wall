@@ -1,0 +1,13 @@
+{
+  "name": "datarefinerylab",
+  "owner": { "name": "Data Refinery Lab" },
+  "metadata": { "description": "Claude Code plugins from the Data Refinery Lab" },
+  "plugins": [
+    {
+      "name": "slides-to-lab-wall",
+      "source": "./",
+      "description": "Presentation to web deck on GitHub Pages, synced to the lab's six-screen wall, with optional phone questions.",
+      "version": "1.0.0"
+    }
+  ]
+}

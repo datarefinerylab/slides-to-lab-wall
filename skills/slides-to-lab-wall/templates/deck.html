@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>__TITLE__</title>
+<link rel="stylesheet" href="../labdeck/labdeck.css">
+<!-- Fonts: use the source deck's fonts. Google Fonts link here, or @font-face with files in assets/fonts/. -->
+<style>
+/* ===== theme: copied from the source deck (colours, fonts) ===== */
+:root{
+  --ld-bg:#ffffff;          /* slide background */
+  --ld-fg:#1f2937;          /* main text */
+  --ld-acc:#2563eb;         /* accent: links, highlights, results bars */
+  --ld-hot:#ea580c;         /* second accent: new answers, warnings */
+  --ld-font:"Calibri","Carlito",system-ui,sans-serif;
+  --ld-font-display:var(--ld-font);
+  --ld-letterbox:#000;      /* around the slide when the screen is not 16:9 */
+  --ld-wall-bg:var(--ld-bg);/* lab wall background */
+}
+.slide{background:var(--ld-bg);color:var(--ld-fg);font-family:var(--ld-font)}
+
+/* ===== slide styles ===== */
+
+/* ===== lab wall styles (wall content is not inside .slide) ===== */
+
+</style>
+</head>
+<body>
+<main id="slides">
+
+  <!-- One <section class="slide"> per slide, designed at the size set in LABDECK below.
+       data-transition: fade | push | cover | uncover | wipe | zoom | morph | none
+       data-step="1" on an element: it appears on the first click (data-build: fade | rise | zoom | wipe | appear)
+       <template class="wall">: what the six lab screens show for this slide (data-screens="1", "2-5", "6", "1-6")
+       <aside class="notes">: speaker notes (never shown) -->
+
+  <section class="slide" data-section="__SECTION__">
+    <h1>__TITLE__</h1>
+    <template class="wall">
+      <div data-screens="2-5"><h1 data-fit>__TITLE__</h1></div>
+    </template>
+  </section>
+
+</main>
+<script>
+window.LABDECK = {
+  title: '__TITLE__',
+  author: '',
+  date: '',
+  width: 1920, height: 1080,
+  transition: 'fade', duration: 600,
+  home: '../',
+  polls: {},
+};
+</script>
+<script src="../labdeck/qrcode.js"></script>
+<script src="../labdeck/labdeck.js"></script>
+</body>
+</html>

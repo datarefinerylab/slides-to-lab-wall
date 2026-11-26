@@ -1,0 +1,10 @@
+{
+  "name": "slides-to-lab-wall",
+  "version": "1.0.0",
+  "description": "Turn a presentation (PowerPoint, Keynote, PDF, Google Slides) into a web deck on GitHub Pages that matches the original and drives the lab's six-screen display wall in sync, with optional phone questions by QR code.",
+  "author": { "name": "Data Refinery Lab" },
+  "homepage": "https://github.com/datarefinerylab/slides-to-lab-wall",
+  "repository": "https://github.com/datarefinerylab/slides-to-lab-wall",
+  "license": "MIT",
+  "keywords": ["slides", "presentation", "powerpoint", "github-pages", "display-wall", "polls"]
+}

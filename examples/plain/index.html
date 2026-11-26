@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Reading Floor Plans at Scale</title>
+<link rel="stylesheet" href="../labdeck/labdeck.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap">
+<!-- Example of a plain deck (no audience questions), as the skill builds it from a white
+     university-style PowerPoint: title bar, builds, push/morph/wipe transitions, a chart. -->
+<style>
+:root{
+  --ld-bg:#ffffff; --ld-fg:#14213d; --ld-acc:#0f766e; --ld-hot:#e76f51;
+  --ld-font:"Source Sans 3",Calibri,system-ui,sans-serif; --ld-font-display:var(--ld-font);
+  --ld-letterbox:#0d1424; --ld-wall-bg:#ffffff;
+  --navy:#14213d; --teal:#0f766e; --sand:#f4efe6; --grey:#5c677d;
+}
+.slide{background:var(--ld-bg);color:var(--ld-fg);font-family:var(--ld-font)}
+.slide .bar{position:absolute;left:0;top:0;right:0;height:150px;background:var(--navy);color:#fff;display:flex;align-items:center;padding:0 110px;box-sizing:border-box}
+.slide .bar h2{margin:0;font:700 58px/1 var(--ld-font)}
+.slide .foot{position:absolute;left:110px;right:110px;bottom:46px;display:flex;justify-content:space-between;font:400 22px/1 var(--ld-font);color:var(--grey)}
+.slide .body{position:absolute;left:110px;right:110px;top:220px;bottom:130px}
+.slide ul.pts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:34px}
+.slide ul.pts li{font:400 44px/1.25 var(--ld-font);padding-left:56px;position:relative}
+.slide ul.pts li::before{content:"";position:absolute;left:0;top:.42em;width:22px;height:22px;background:var(--teal)}
+.slide ul.pts li b{color:var(--teal)}
+/* title */
+.s-title{background:var(--sand)}
+.s-title .mark{position:absolute;left:110px;top:160px;width:120px;height:120px;background:var(--teal)}
+.s-title h1{position:absolute;left:110px;top:330px;width:1500px;margin:0;font:800 120px/1.02 var(--ld-font);letter-spacing:-.02em}
+.s-title .who{position:absolute;left:110px;top:640px;font:400 40px/1.3 var(--ld-font);color:var(--grey)}
+.s-title .stripe{position:absolute;left:0;right:0;bottom:0;height:24px;background:var(--navy)}
+/* two columns with a picture */
+.cols{display:grid;grid-template-columns:1fr 760px;gap:80px;height:100%;align-items:center}
+.plan{width:760px;height:560px;background:#fff;border:3px solid var(--navy)}
+/* chart */
+.chart{display:flex;align-items:flex-end;gap:70px;height:520px;padding:0 40px;border-bottom:3px solid var(--navy)}
+.chart div{flex:1;background:var(--teal);position:relative}
+.chart div span{position:absolute;left:0;right:0;top:-58px;text-align:center;font:700 40px/1 var(--ld-font);color:var(--navy)}
+.chart div em{position:absolute;left:0;right:0;bottom:-58px;text-align:center;font:400 30px/1 var(--ld-font);font-style:normal;color:var(--grey)}
+.chart div.hi{background:var(--ld-hot)}
+/* quote */
+.s-quote{background:var(--navy);color:#fff}
+.s-quote blockquote{position:absolute;left:220px;right:220px;top:300px;margin:0;font:600 76px/1.15 var(--ld-font)}
+.s-quote cite{position:absolute;left:220px;top:700px;font:400 36px/1 var(--ld-font);color:#9fb3c8;font-style:normal}
+/* end */
+.s-end{background:var(--sand)}
+.s-end .mark{position:absolute;left:900px;top:300px;width:120px;height:120px;background:var(--teal)}
+.s-end h1{position:absolute;left:0;right:0;top:470px;margin:0;text-align:center;font:800 110px/1 var(--ld-font)}
+.s-end p{position:absolute;left:0;right:0;top:620px;text-align:center;font:400 38px/1 var(--ld-font);color:var(--grey)}
+
+/* lab wall */
+.w-kick{font:700 22px/1 var(--ld-font);letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.w-title{font:800 88px/1.04 var(--ld-font);color:var(--navy);max-height:190px;overflow:hidden}
+.w-sub{font:400 32px/1.3 var(--ld-font);color:var(--grey)}
+.w-pts{display:flex;gap:40px;align-items:center;height:100%}
+.w-pts div{flex:1;border-left:8px solid var(--teal);padding-left:26px;font:600 38px/1.2 var(--ld-font);color:var(--navy)}
+.w-bars{display:flex;align-items:flex-end;gap:40px;height:250px;border-bottom:3px solid var(--navy)}
+.w-bars div{flex:1;background:var(--teal);position:relative}
+.w-bars div.hi{background:var(--ld-hot)}
+.w-bars div span{position:absolute;left:0;right:0;top:-40px;text-align:center;font:700 28px/1 var(--ld-font);color:var(--navy)}
+.w-navy{background:var(--navy);color:#fff}
+</style>
+</head>
+<body>
+<main id="slides">
+
+  <section class="slide s-title" data-section="Introduction">
+    <div class="mark" data-morph="mark"></div>
+    <h1 data-morph="title">Reading floor plans at scale</h1>
+    <div class="who">Data Refinery Lab · group meeting</div>
+    <div class="stripe"></div>
+    <template class="wall">
+      <div data-screens="2-5"><div class="w-kick">Group meeting</div><div class="w-title" data-fit>Reading floor plans at scale</div></div>
+    </template>
+    <aside class="notes">Welcome. Ten minutes, one result.</aside>
+  </section>
+
+  <section class="slide" data-section="Introduction" data-transition="push">
+    <div class="bar"><h2>Why this is hard</h2></div>
+    <div class="body">
+      <ul class="pts">
+        <li data-step="1" data-build="rise">Plans are <b>drawings</b>, not data</li>
+        <li data-step="2" data-build="rise">Every office draws walls <b>its own way</b></li>
+        <li data-step="3" data-build="rise">Scanned archives are <b>noisy</b> and rotated</li>
+      </ul>
+    </div>
+    <div class="foot"><span>Reading floor plans at scale</span><span>2</span></div>
+    <template class="wall">
+      <div data-screens="2-5" class="w-pts">
+        <div data-step="1">Plans are drawings, not data</div>
+        <div data-step="2">Every office draws its own way</div>
+        <div data-step="3">Scans are noisy and rotated</div>
+      </div>
+    </template>
+  </section>
+
+  <section class="slide" data-section="Method" data-transition="wipe">
+    <div class="bar"><h2>From pixels to rooms</h2></div>
+    <div class="body">
+      <div class="cols">
+        <ul class="pts">
+          <li>Detect walls and openings</li>
+          <li>Close them into <b>room polygons</b></li>
+          <li>Label rooms from their contents</li>
+        </ul>
+        <svg class="plan" viewBox="0 0 760 560" data-wall aria-label="A simple floor plan">
+          <rect x="30" y="30" width="700" height="500" fill="none" stroke="#14213d" stroke-width="10"/>
+          <path d="M330 30v300M330 400v130M30 300h200M290 300h40M330 260h250M640 260h90" stroke="#14213d" stroke-width="8" fill="none"/>
+          <rect x="40" y="40" width="280" height="250" fill="#0f766e" opacity=".18"/><rect x="340" y="40" width="380" height="210" fill="#e76f51" opacity=".18"/>
+          <text x="110" y="180" font-size="34" fill="#14213d" font-family="sans-serif">Office</text><text x="470" y="160" font-size="34" fill="#14213d" font-family="sans-serif">Lab</text>
+        </svg>
+      </div>
+    </div>
+    <div class="foot"><span>Reading floor plans at scale</span><span>3</span></div>
+  </section>
+
+  <section class="slide" data-section="Results" data-transition="push">
+    <div class="bar"><h2>Rooms found correctly</h2></div>
+    <div class="body" style="top:300px">
+      <div class="chart">
+        <div style="height:46%"><span>46%</span><em>2022</em></div>
+        <div style="height:61%"><span>61%</span><em>2023</em></div>
+        <div style="height:74%"><span>74%</span><em>2024</em></div>
+        <div class="hi" style="height:91%" data-step="1" data-build="zoom"><span>91%</span><em>this work</em></div>
+      </div>
+    </div>
+    <div class="foot"><span>Reading floor plans at scale</span><span>4</span></div>
+    <template class="wall">
+      <div data-screens="2-3"><div class="w-kick">Results</div><div class="w-title" data-fit>Rooms found correctly</div></div>
+      <div data-screens="4-5" style="justify-content:flex-end;padding-bottom:50px">
+        <div class="w-bars"><div style="height:46%"><span>46%</span></div><div style="height:61%"><span>61%</span></div><div style="height:74%"><span>74%</span></div><div class="hi" style="height:91%" data-step="1"><span>91%</span></div></div>
+      </div>
+    </template>
+  </section>
+
+  <section class="slide s-quote" data-section="Results" data-transition="zoom">
+    <blockquote>“The plan was always there. We just learned to read it.”</blockquote>
+    <cite>A reviewer, probably</cite>
+    <template class="wall">
+      <div data-screens="1-6" class="w-navy" style="align-items:center;text-align:center">
+        <div class="w-title" style="color:#fff;font-size:72px">“The plan was always there. We just learned to read it.”</div>
+      </div>
+    </template>
+  </section>
+
+  <section class="slide s-end" data-transition="morph">
+    <div class="mark" data-morph="mark"></div>
+    <h1 data-morph="title">Thank you</h1>
+    <p>Questions welcome</p>
+  </section>
+
+</main>
+<script>
+window.LABDECK = {
+  title: 'Reading Floor Plans at Scale',
+  author: 'Data Refinery Lab',
+  date: 'Group meeting',
+  width: 1920, height: 1080,
+  transition: 'fade', duration: 700,
+  home: '../',
+  polls: {},
+};
+</script>
+<script src="../labdeck/qrcode.js"></script>
+<script src="../labdeck/labdeck.js"></script>
+</body>
+</html>

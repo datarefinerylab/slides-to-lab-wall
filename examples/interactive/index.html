@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>How We Review Code</title>
+<link rel="stylesheet" href="../labdeck/labdeck.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&display=swap">
+<!-- Example of a deck where only some slides are interactive: slides 3–6 ask the room
+     (QR code, live count, live results); the others are ordinary slides with no QR code. -->
+<style>
+:root{
+  --ld-bg:#0e1117; --ld-fg:#f2f4f8; --ld-acc:#7c9cff; --ld-hot:#ffb454;
+  --ld-font:"Inter",system-ui,sans-serif; --ld-font-display:"Space Grotesk","Inter",sans-serif;
+  --ld-letterbox:#000; --ld-wall-bg:#0e1117;
+}
+.slide{background:radial-gradient(ellipse 80% 70% at 30% 20%,#1a2133,var(--ld-bg));color:var(--ld-fg);font-family:var(--ld-font);padding:110px 130px;display:flex;flex-direction:column;gap:34px}
+.slide .kick{font:600 24px/1 var(--ld-font);letter-spacing:.16em;text-transform:uppercase;color:var(--ld-acc)}
+.slide h1{font:700 120px/1 var(--ld-font-display);margin:0;letter-spacing:-.02em}
+.slide h2{font:700 76px/1.08 var(--ld-font-display);margin:0;letter-spacing:-.015em;max-width:1500px}
+.slide p{font:400 40px/1.35 var(--ld-font);color:#aab3c5;margin:0;max-width:1400px}
+.slide .center{justify-content:center}
+.s-center{justify-content:center}
+.slide .ld-poll{font-size:34px;max-width:1300px}
+.slide .ld-poll .ld-q{font-size:76px}
+.slide .ld-results{font-size:34px;flex:1;margin-right:260px}
+.slide .ld-results .ld-bar{grid-template-columns:520px minmax(0,1fr) 120px 70px}
+
+.w-kick{font:600 20px/1 var(--ld-font);letter-spacing:.16em;text-transform:uppercase;color:var(--ld-acc)}
+.w-title{font:700 92px/1.04 var(--ld-font-display);max-height:200px;overflow:hidden}
+.w-q{font:700 48px/1.12 var(--ld-font-display)}
+.wall-live .ld-results{flex:1;font-size:24px}
+.wall-live .ld-results .ld-bar{grid-template-columns:600px minmax(0,1fr) 100px 60px}
+</style>
+</head>
+<body>
+<main id="slides">
+
+  <section class="slide s-center" data-section="Welcome">
+    <div class="kick">Lab meeting</div>
+    <h1>How we review code</h1>
+    <p>Three questions for the room. Phones out on slide 3.</p>
+  </section>
+
+  <section class="slide s-center" data-section="Welcome" data-transition="push">
+    <div class="kick">Context</div>
+    <h2>Last month we merged 140 pull requests.</h2>
+    <p data-step="1" data-build="rise">Most were reviewed within a day. Some waited two weeks.</p>
+  </section>
+
+  <section class="slide" data-section="Question 1">
+    <div class="kick">On your phone</div>
+    <div class="ld-poll" data-poll="when"></div>
+  </section>
+
+  <section class="slide" data-section="Question 1">
+    <div class="kick">Results</div>
+    <h2 style="font-size:54px">When do you review a pull request?</h2>
+    <div class="ld-results" data-poll="when"></div>
+    <template class="wall">
+      <div data-screens="2-5" class="wall-live" style="justify-content:flex-start;padding-top:28px">
+        <div class="w-kick">Results · When do you review a pull request?</div>
+        <div class="ld-results" data-poll="when"></div>
+      </div>
+    </template>
+  </section>
+
+  <section class="slide" data-section="Question 2">
+    <div class="kick">On your phone</div>
+    <div class="ld-poll" data-poll="hard"></div>
+  </section>
+
+  <section class="slide" data-section="Question 2" data-qr="off">
+    <div class="kick">Results</div>
+    <h2 style="font-size:54px">One word: what makes a review hard?</h2>
+    <div class="ld-results" data-poll="hard" style="margin-right:0"></div>
+  </section>
+
+  <section class="slide s-center" data-section="Wrap-up" data-transition="fade">
+    <div class="kick">Proposal</div>
+    <h2>Small pull requests. One reviewer. Answer within a day.</h2>
+    <p data-step="1">We try it for a month and look at the numbers again.</p>
+    <template class="wall">
+      <div data-screens="2-5"><div class="w-kick">Proposal</div><div class="w-title" data-fit>Small pull requests. One reviewer. Within a day.</div></div>
+    </template>
+  </section>
+
+  <section class="slide s-center" data-section="Wrap-up">
+    <h1>Thank you</h1>
+  </section>
+
+</main>
+<script>
+window.LABDECK = {
+  title: 'How We Review Code',
+  author: 'Data Refinery Lab',
+  width: 1920, height: 1080,
+  transition: 'fade', duration: 600,
+  home: '../',
+  polls: {
+    when: { type: 'single', q: 'When do you review a pull request?', opts: ['As soon as I see it', 'Same day', 'Within a few days', 'When someone reminds me'], demo: [5, 9, 6, 3] },
+    hard: { type: 'cloud', q: 'One word: what makes a review hard?', hint: 'One or two words.', max: 24, demo: ['size', 'no tests', 'context', 'size', 'naming', 'size', 'no description', 'context', 'time', 'size', 'style fights', 'context'] },
+  },
+};
+</script>
+<script src="../labdeck/qrcode.js"></script>
+<script src="../labdeck/labdeck.js"></script>
+</body>
+</html>
