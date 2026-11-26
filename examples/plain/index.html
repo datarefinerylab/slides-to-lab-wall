@@ -54,8 +54,8 @@
 .w-kick{font:700 22px/1 var(--ld-font);letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
 .w-title{font:800 88px/1.04 var(--ld-font);color:var(--navy);max-height:190px;overflow:hidden}
 .w-sub{font:400 32px/1.3 var(--ld-font);color:var(--grey)}
-.w-pts{display:flex;gap:40px;align-items:center;height:100%}
-.w-pts div{flex:1;border-left:8px solid var(--teal);padding-left:26px;font:600 38px/1.2 var(--ld-font);color:var(--navy)}
+.w-pts{display:flex;flex-direction:row;gap:0;align-items:center;padding:0}
+.w-pts div{flex:1;margin:0 40px;border-left:8px solid var(--teal);padding-left:26px;font:600 38px/1.2 var(--ld-font);color:var(--navy)}
 .w-bars{display:flex;align-items:flex-end;gap:40px;height:250px;border-bottom:3px solid var(--navy)}
 .w-bars div{flex:1;background:var(--teal);position:relative}
 .w-bars div.hi{background:var(--ld-hot)}
@@ -88,7 +88,8 @@
     </div>
     <div class="foot"><span>Reading floor plans at scale</span><span>2</span></div>
     <template class="wall">
-      <div data-screens="2-5" class="w-pts">
+      <div data-screens="2"><div class="w-kick">Introduction</div><div class="w-title" data-fit style="font-size:60px">Why this is hard</div></div>
+      <div data-screens="3-5" class="w-pts">
         <div data-step="1">Plans are drawings, not data</div>
         <div data-step="2">Every office draws its own way</div>
         <div data-step="3">Scans are noisy and rotated</div>

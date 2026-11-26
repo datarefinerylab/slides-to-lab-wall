@@ -30,7 +30,7 @@ Each slide may hold a `<template class="wall">`. Its child elements are placed o
 ```
 
 - `data-screens`: `"3"`, `"2-5"`, `"1-6"` / `"all"`. Default `2-5`.
-- Each placed element is a 360 px tall flex column (centered vertically, padding 30px 48px) at `left = (a-1)×640`, `width = (b-a+1)×640`. Override with inline style or classes.
+- Each placed element is a 360 px tall flex column (centered vertically, padding 30px 48px) at `left = (a-1)×640`, `width = (b-a+1)×640`. Override with inline style or classes. For items side by side, set `flex-direction:row` (a class with only `display:flex` stays a column).
 - `data-step="N"` and `data-build` work in wall templates too, in step with the slide's click builds.
 - `data-fit` on a text element with a fixed height or max-height shrinks it until it fits.
 - `data-bg="…"` on the `<template>` sets the whole band's background for that slide.
