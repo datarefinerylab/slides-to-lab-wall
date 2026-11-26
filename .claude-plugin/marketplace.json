@@ -7,7 +7,7 @@
       "name": "slides-to-lab-wall",
       "source": "./",
       "description": "Presentation to web deck on GitHub Pages, synced to the lab's six-screen wall, with optional phone questions.",
-      "version": "1.0.0"
+      "version": "1.1.0"
     }
   ]
 }
